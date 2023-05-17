@@ -178,3 +178,22 @@ def get_class_names(train_dir):
   # Return class names
   return class_names
 
+def import_libraries():
+    """
+    Imports necessary libraries for a CNN model.
+
+    This function should be called at the beginning of the script.
+    """
+    import numpy as np
+    import random
+    import pandas as pd
+    import tensorflow as tf
+    from tensorflow.keras import Sequential
+    from tensorflow.keras.layers import Dense, Conv2D, MaxPool2D, Activation, Flatten
+    from tensorflow.keras.optimizers import Adam
+    from tensorflow.keras.preprocessing.image import ImageDataGenerator
+    from tensorflow.keras.models import clone_model
+
+    print("Libraries imported successfully.")
+
+
