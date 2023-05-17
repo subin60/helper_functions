@@ -153,4 +153,28 @@ def pred_and_plot(model, filename, class_names, img_shape=224):
   plt.title(f"Prediction: {pred_class}")
   plt.axis(False)
   plt.show()
+ 
+def get_class_names(train_dir):
+  """
+  Function to get class names from a directory.
+
+  Args:
+  train_dir: str, path to the training directory containing class subdirectories.
+
+  Returns:
+  class_names: numpy array, array of class names sorted in alphabetical order.
+  """
+
+  # Import necessary libraries
+  import pathlib
+  import numpy as np
+
+  # Convert input to a pathlib Path object (this allows for handy methods to be used on the input)
+  data_dir = pathlib.Path(train_dir)
+
+  # Use the glob method to find all class subdirectories, get their names and sort them
+  class_names = np.array(sorted([item.name for item in data_dir.glob('*')]))
+
+  # Return class names
+  return class_names
 
