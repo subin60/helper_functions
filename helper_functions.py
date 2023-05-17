@@ -55,8 +55,7 @@ def download_and_unzip(filepath):
   import zipfile
 
   # Use wget to download the zip file
-  # Note that we're using Python string formatting to insert the filepath into the wget command
-  !wget {filepath}
+  os.system(f'wget {filepath}')
   
   # Use os.path.basename to get the filename (with extension) from the filepath
   filename_with_extension = os.path.basename(filepath)
@@ -69,3 +68,4 @@ def download_and_unzip(filepath):
 
   # Close the ZipFile object
   zip_ref.close()
+
