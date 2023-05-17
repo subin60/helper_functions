@@ -38,3 +38,34 @@ def plot_history(history):
   plt.xlabel('Epochs')  # X-axis label
   plt.ylabel('Accuracy')  # Y-axis label
   plt.legend()  # Legend to differentiate between training and validation accuracy
+
+
+def download_and_unzip(filepath):
+  """
+  Downloads and unzips a zip file from a specified filepath.
+
+  Args:
+  filepath: A string specifying the URL of the zip file to download.
+
+  Returns:
+  None.
+  """
+  # Import necessary libraries
+  import os
+  import zipfile
+
+  # Use wget to download the zip file
+  # Note that we're using Python string formatting to insert the filepath into the wget command
+  !wget {filepath}
+  
+  # Use os.path.basename to get the filename (with extension) from the filepath
+  filename_with_extension = os.path.basename(filepath)
+  
+  # Create a ZipFile object
+  zip_ref = zipfile.ZipFile(filename_with_extension, 'r')
+
+  # Extract all the contents of the zip file in current directory
+  zip_ref.extractall()
+
+  # Close the ZipFile object
+  zip_ref.close()
