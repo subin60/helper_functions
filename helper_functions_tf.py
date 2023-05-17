@@ -108,4 +108,49 @@ def view_random_image(target_dir, target_class):
 
   return img
 
+def pred_and_plot(model, filename, class_names, img_shape=224):
+  """
+  Function to predict the class of an image and plot it. 
+  Args:
+  model: TensorFlow model
+  filename: string, path to the target image
+  class_names: list, contains the class names that the model can predict
+  img_shape: int, the size of the image the model was trained on (default is 224)
+
+  Returns:
+  None, but prints out the predicted class and an image plot
+  """
+  
+  import tensorflow as tf
+  import numpy as np
+  import matplotlib.pyplot as plt
+
+  # Read in the image file
+  img = tf.io.read_file(filename)
+
+  # Decode the read file into a tensor and resize it to the img_shape
+  img = tf.image.decode_image(img)
+  img = tf.image.resize(img, size=[img_shape, img_shape])
+
+  # Rescale the image (divide by 255)
+  img = img/255.
+
+  # Expand the dimensions of the image tensor from [img_shape, img_shape, color_channels] 
+  # to [1, img_shape, img_shape, color_channels] as the model expects a batch
+  img_expanded = tf.expand_dims(img, axis=0) 
+
+  # Make a prediction on the image using the model
+  pred = model.predict(img_expanded)
+
+  # Get the predicted class
+  if len(pred[0]) > 1: # multi-class
+    pred_class = class_names[np.argmax(pred)]
+  else: # binary class
+    pred_class = class_names[int(tf.round(pred))]
+
+  # Plot the image with predicted class as title
+  plt.imshow(img)
+  plt.title(f"Prediction: {pred_class}")
+  plt.axis(False)
+  plt.show()
 
