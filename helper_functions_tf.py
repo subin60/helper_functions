@@ -69,3 +69,43 @@ def download_and_unzip(filepath):
   # Close the ZipFile object
   zip_ref.close()
 
+
+def view_random_image(target_dir, target_class):
+  """
+  Picks and displays a random image from a specified directory and class.
+
+  Parameters:
+  target_dir : str
+      The target directory where the image classes directories are.
+  target_class : str
+      The target class from which to pick the image.
+
+  Returns:
+  img : numpy.ndarray
+      The image array in RGB format.
+  """
+  # Import libraries
+  import matplotlib.pyplot as plt
+  import matplotlib.image as mpimg
+  import os
+  import random
+
+  # Setup the target directory (we'll view images from here)
+  target_folder = os.path.join(target_dir, target_class)
+
+  # Get a random image path from the target directory
+  random_image = random.choice(os.listdir(target_folder))
+
+  # Read in the image using matplotlib
+  img = mpimg.imread(os.path.join(target_folder, random_image))
+
+  # Plot the image
+  plt.imshow(img)
+  plt.title(target_class)
+  plt.axis("off")
+
+  print(f"Image shape: {img.shape}") # show the shape of the image
+
+  return img
+
+
