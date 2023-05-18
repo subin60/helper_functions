@@ -114,11 +114,6 @@ def view_random_image(target_dir, target_class):
   img : numpy.ndarray
       The image array in RGB format.
   """
-  # Import libraries
-  import matplotlib.pyplot as plt
-  import matplotlib.image as mpimg
-  import os
-  import random
 
   # Setup the target directory (we'll view images from here)
   target_folder = os.path.join(target_dir, target_class)
