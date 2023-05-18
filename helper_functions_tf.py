@@ -251,4 +251,28 @@ def create_tensorboard_callback(dir_name, experiment_name):
   # Return the TensorBoard callback instance
   return tensorboard_callback
 
+import os
+
+def walk_through_dir(dir_path):
+    """
+    Walks through a directory, printing out the number of directories and 
+    images (files) in each, along with each subdirectory's name.
+    
+    Args:
+        dir_path (str): The path of the target directory to walk through.
+    
+    Returns:
+        None. However, as a side effect, this function will print:
+        - The number of subdirectories in `dir_path`
+        - The number of images (or files) in each subdirectory
+        - The name of each subdirectory
+    """
+    # Use os.walk to generate a 3-tuple for each directory it traverses 
+    for dirpath, dirnames, filenames in os.walk(dir_path):
+        # Get the count of directories and files
+        num_dirs = len(dirnames)
+        num_files = len(filenames)
+        
+        # Print the counts and the current directory path
+        print(f"There are {num_dirs} directories and {num_files} images in '{dirpath}'.")
 
