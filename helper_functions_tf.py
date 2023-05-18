@@ -178,6 +178,7 @@ def get_class_names(train_dir):
   # Return class names
   return class_names
 
+
 def import_libraries():
     """
     Imports necessary libraries for a CNN model.
@@ -194,6 +195,10 @@ def import_libraries():
     from tensorflow.keras.preprocessing.image import ImageDataGenerator
     from tensorflow.keras.models import clone_model
 
+    # Add to global namespace
+    global np, random, pd, tf, Sequential, Dense, Conv2D, MaxPool2D, Activation, Flatten, Adam, ImageDataGenerator, clone_model
+
     print("Libraries imported successfully.")
+
 
 
