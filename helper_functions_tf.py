@@ -1,3 +1,26 @@
+import numpy as np
+import random
+import pandas as pd
+import os
+import zipfile
+import matplotlib.pyplot as plt
+import datetime
+import matplotlib.image as mpimg
+
+
+import tensorflow as tf
+from tensorflow.keras import Sequential
+from tensorflow.keras.layers import Dense, Conv2D, MaxPool2D, Activation, Flatten
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.models import clone_model
+
+
+
+
+
+import matplotlib.pyplot as plt
+
 def plot_history(history):
   """
   Plots the training and validation loss and accuracy of a trained model.
@@ -10,7 +33,7 @@ def plot_history(history):
   """
   
   # Importing the necessary library for plotting
-  import matplotlib.pyplot as plt
+  
   
   # Extracting loss and accuracy for both training and validation from the History object
   loss = history.history['loss']
@@ -40,6 +63,9 @@ def plot_history(history):
   plt.legend()  # Legend to differentiate between training and validation accuracy
 
 
+import os
+import zipfile
+  
 def download_and_unzip(filepath):
   """
   Downloads and unzips a zip file from a specified filepath.
@@ -51,8 +77,7 @@ def download_and_unzip(filepath):
   None.
   """
   # Import necessary libraries
-  import os
-  import zipfile
+ 
 
   # Use wget to download the zip file
   os.system(f'wget {filepath}')
@@ -69,6 +94,11 @@ def download_and_unzip(filepath):
   # Close the ZipFile object
   zip_ref.close()
 
+
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
+import os
+import random
 
 def view_random_image(target_dir, target_class):
   """
@@ -108,6 +138,11 @@ def view_random_image(target_dir, target_class):
 
   return img
 
+
+import tensorflow as tf
+import numpy as np
+import matplotlib.pyplot as plt
+
 def pred_and_plot(model, filename, class_names, img_shape=224):
   """
   Function to predict the class of an image and plot it. 
@@ -121,9 +156,6 @@ def pred_and_plot(model, filename, class_names, img_shape=224):
   None, but prints out the predicted class and an image plot
   """
   
-  import tensorflow as tf
-  import numpy as np
-  import matplotlib.pyplot as plt
 
   # Read in the image file
   img = tf.io.read_file(filename)
@@ -153,7 +185,11 @@ def pred_and_plot(model, filename, class_names, img_shape=224):
   plt.title(f"Prediction: {pred_class}")
   plt.axis(False)
   plt.show()
- 
+
+  
+import pathlib
+import numpy as np
+
 def get_class_names(train_dir):
   """
   Function to get class names from a directory.
@@ -166,8 +202,6 @@ def get_class_names(train_dir):
   """
 
   # Import necessary libraries
-  import pathlib
-  import numpy as np
 
   # Convert input to a pathlib Path object (this allows for handy methods to be used on the input)
   data_dir = pathlib.Path(train_dir)
@@ -179,26 +213,6 @@ def get_class_names(train_dir):
   return class_names
 
 
-def import_libraries():
-    """
-    Imports necessary libraries for a CNN model.
-
-    This function should be called at the beginning of the script.
-    """
-    import numpy as np
-    import random
-    import pandas as pd
-    import tensorflow as tf
-    from tensorflow.keras import Sequential
-    from tensorflow.keras.layers import Dense, Conv2D, MaxPool2D, Activation, Flatten
-    from tensorflow.keras.optimizers import Adam
-    from tensorflow.keras.preprocessing.image import ImageDataGenerator
-    from tensorflow.keras.models import clone_model
-
-    # Add to global namespace
-    global np, random, pd, tf, Sequential, Dense, Conv2D, MaxPool2D, Activation, Flatten, Adam, ImageDataGenerator, clone_model
-
-    print("Libraries imported successfully.")
 
 # Import necessary libraries
 import tensorflow as tf
