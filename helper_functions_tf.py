@@ -200,5 +200,41 @@ def import_libraries():
 
     print("Libraries imported successfully.")
 
+# Import necessary libraries
+import tensorflow as tf
+import datetime
+
+def create_tensorboard_callback(dir_name, experiment_name):
+  """
+  Creates a TensorBoard callback instance to store log files.
+
+  This function generates a TensorBoard callback which is designed to be used 
+  with a TensorFlow Keras model. The callback will write logs for TensorBoard 
+  which allow you to visualize dynamic graphs of your training and test 
+  metrics, as well as activation histograms for the different layers in your model.
+
+  Args:
+    dir_name (str): Target directory to store TensorBoard log files.
+    experiment_name (str): Name of the experiment directory (e.g., 'efficientnet_model_1').
+
+  Returns:
+    tensorboard_callback (tf.keras.callbacks.TensorBoard): A TensorBoard callback instance 
+    configured with the log directory.
+  
+  Example:
+    tensorboard_cb = create_tensorboard_callback("tensorboard_logs", "exp1")
+    model.fit(X_train, y_train, callbacks=[tensorboard_cb])
+  """
+  
+  # Combine directory name, experiment name, and current time to form a log directory
+  log_dir = dir_name + "/" + experiment_name + "/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+  
+  # Create a TensorBoard callback instance
+  tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir)
+  
+  print(f"Saving TensorBoard log files to: {log_dir}")
+  
+  # Return the TensorBoard callback instance
+  return tensorboard_callback
 
 
