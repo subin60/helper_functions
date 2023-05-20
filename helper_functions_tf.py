@@ -404,4 +404,72 @@ def print_layer_status(model):
     print(f"\nNumber of trainable layers: {trainable_count}")
     print(f"Number of non-trainable layers: {non_trainable_count}")
 
+
+import tensorflow as tf    
+
+def create_checkpoint_callback(directory_path, monitor="val_accuracy"):
+    """
+    Creates a ModelCheckpoint callback that saves the best model during training.
+    
+    Args:
+        directory_path (str): Directory where the model checkpoints will be saved.
+        monitor (str): Quantity to monitor for choosing the best model to save.
+            Default is "val_accuracy".
+            
+    Returns:
+        A tf.keras.callbacks.ModelCheckpoint instance.
+    """
+    checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
+        filepath=directory_path,
+        save_weights_only=True, # Save only the model weights
+        monitor=monitor, # Save the model weights which score the best on the chosen quantity
+        save_best_only=True, # Only keep the model that has achieved the "best" so far in terms of monitored quantity
+        verbose=1, # Print the details about the saved checkpoints
+    )
+    
+    return checkpoint_callback
+  
+from tensorflow.keras import layers, Sequential
+
+def create_data_augmentation(rotation_range=0.2, zoom_range=0.2, height_range=0.2, 
+                             width_range=0.2, flip_mode="horizontal", include_rescaling=False, name="data_augmentation"):
+    """
+    Creates a Sequential model for data augmentation.
+    
+    Args:
+        rotation_range (float): A positive float represented as fraction of 2pi, the total range to randomly rotate images.
+            Default is 0.2.
+        zoom_range (float): A positive float represented as fraction, the total range to randomly zoom images.
+            Default is 0.2.
+        height_range (float): A positive float represented as fraction, the total range to randomly alter the height of images.
+            Default is 0.2.
+        width_range (float): A positive float represented as fraction, the total range to randomly alter the width of images.
+            Default is 0.2.
+        flip_mode (str): One of {"horizontal", "vertical", "horizontal_and_vertical"}.
+            "horizontal": Randomly flip inputs horizontally.
+            "vertical": Randomly flip inputs vertically.
+            "horizontal_and_vertical": Randomly flip inputs both horizontally and vertically.
+            Default is "horizontal".
+        include_rescaling (bool): Whether to include a Rescaling layer. 
+            This layer is needed for some models like ResNet50V2, but should be omitted for models like EfficientNetB0 
+            that include their own rescaling. Default is False.
+        name (str): Name of the Sequential model. Default is "data_augmentation".
+            
+    Returns:
+        A keras.Sequential instance representing the data augmentation model.
+    """
+    data_augmentation_layers = [
+        layers.RandomFlip(flip_mode),
+        layers.RandomRotation(rotation_range),
+        layers.RandomZoom(zoom_range),
+        layers.RandomHeight(height_range),
+        layers.RandomWidth(width_range),
+    ]
+    if include_rescaling:
+        data_augmentation_layers.append(layers.Rescaling(1./255))
+
+    data_augmentation = Sequential(data_augmentation_layers, name=name)
+
+    return data_augmentation
+  
     
