@@ -328,3 +328,52 @@ def compare_history(original_history, new_history, initial_epochs=5):
     # Show the plot
     plt.show()        
 
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
+import os
+import random
+import tensorflow as tf
+
+def view_augmented_image(directory, class_names, data_augmentation):
+    """
+    Function to view an original and augmented image from a randomly selected class.
+
+    Parameters:
+    directory (str): The path to the directory containing the class subdirectories.
+    class_names (list): A list of class names, corresponding to subdirectory names in the directory path.
+    data_augmentation (callable): A function or model that performs image augmentation.
+
+    Returns:
+    None
+    """
+    # Choose a random class
+    target_class = random.choice(class_names)
+    
+    # Create the target directory path
+    target_dir = os.path.join(directory, target_class)
+    
+    # Choose a random image from target directory
+    random_image = random.choice(os.listdir(target_dir))
+    
+    # Create the chosen random image path
+    random_image_path = os.path.join(target_dir, random_image)
+    
+    # Read in the chosen target image
+    img = mpimg.imread(random_image_path)
+    
+    # Plot the target image
+    plt.imshow(img)
+    plt.title(f"Original random image from class: {target_class}")
+    plt.axis('off')
+    plt.show()
+
+    # Perform data augmentation 
+    # The data augmentation model requires input shape (None, height, width, 3)
+    augmented_img = data_augmentation(tf.expand_dims(img, axis=0))
+    
+    # Plot the augmented image
+    # The augmented image requires normalization after augmentation
+    plt.imshow(tf.squeeze(augmented_img)/255.)
+    plt.title(f"Augmented random image from class: {target_class}")
+    plt.axis('off')
+    plt.show()
