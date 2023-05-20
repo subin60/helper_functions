@@ -471,5 +471,30 @@ def create_data_augmentation(rotation_range=0.2, zoom_range=0.2, height_range=0.
     data_augmentation = Sequential(data_augmentation_layers, name=name)
 
     return data_augmentation
+
+  
+  
+def unfreeze_model_layers(model='base_model', num_last_layers_trainable=10):
+    """
+    Unfreeze the last few layers of a model.
+    
+    Args:
+        model (str, optional): The name of the model whose layers are to be unfrozen. Default is 'base_model'.
+        num_last_layers_trainable (int, optional): The number of last layers to be made trainable. Default is 10.
+    
+    Returns:
+        None
+    """
+    # Fetch the model from global scope
+    model = globals()[model]
+
+    # Make all layers trainable
+    model.trainable = True
+
+    # Freeze all layers except for the last num_last_layers_trainable layers
+    for layer in model.layers[:-num_last_layers_trainable]:
+        layer.trainable = False
+
+    print(f"The last {num_last_layers_trainable} layers of {model.name} are now trainable.")
   
     
