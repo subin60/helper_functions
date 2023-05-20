@@ -390,6 +390,18 @@ def print_layer_status(model):
     Returns:
     None
     """
+    trainable_count = 0
+    non_trainable_count = 0
+
     for i, layer in enumerate(model.layers):
         print(f"Layer {i} | Name: {layer.name} | Trainable: {layer.trainable}")
+        
+        if layer.trainable:
+            trainable_count += 1
+        else:
+            non_trainable_count += 1
+
+    print(f"\nNumber of trainable layers: {trainable_count}")
+    print(f"Number of non-trainable layers: {non_trainable_count}")
+
     
