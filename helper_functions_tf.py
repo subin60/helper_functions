@@ -377,3 +377,18 @@ def view_augmented_image(directory, class_names, data_augmentation):
     plt.title(f"Augmented random image from class: {target_class}")
     plt.axis('off')
     plt.show()
+
+    
+def print_layer_status(model):
+    """
+    Function to print the status of the layers in a model.
+
+    Parameters:
+    model (tensorflow.python.keras.engine.functional.Functional): The model whose layers' status you want to print.
+
+    Returns:
+    None
+    """
+    for i, layer in enumerate(model.layers):
+        print(f"Layer {i} | Name: {layer.name} | Trainable: {layer.trainable}")
+    
