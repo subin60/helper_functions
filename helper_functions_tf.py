@@ -573,7 +573,27 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 import numpy as np
 
-def predict_and_plot(model, test_dir, class_names, img_shape=224, num_images=3, figsize=(18, 10), scale=True):
+def load_and_prep_image(filename, img_shape=224, scale=True):
+    """
+    Reads an image from filename, turns it into a tensor and reshapes into
+    (224, 224, 3).
+
+    Parameters
+    ----------
+    filename (str): string filename of target image
+    img_shape (int): size to resize target image to, default 224
+    scale (bool): whether to scale pixel values to range(0, 1), default True
+    """
+    # Read in the image
+    img = tf.io.read_file(filename)
+    # Decode it into a tensor
+    img = tf.image.decode_image(img, channels=3)
+    # Resize the image
+    img = tf.image.resize(img, [img_shape, img_shape])
+    # Rescale the image (get all values between 0 and 1) if needed
+    return img/255. if scale else img
+
+def predict_and_plot(model, test_dir, class_names, img_shape=224, num_images=3, figsize=(17, 10), scale=True):
     """
     Load random images, make predictions on them, and plot them.
 
@@ -584,30 +604,9 @@ def predict_and_plot(model, test_dir, class_names, img_shape=224, num_images=3, 
     class_names (list): List of class names.
     img_shape (int): Target shape of image.
     num_images (int): Number of images to predict and plot, default 3.
-    figsize (tuple): Figure size, default (18, 10).
+    figsize (tuple): Figure size, default (17, 10).
     scale (bool): Whether to scale image pixel values to range(0, 1), default True.
     """
-
-    def load_and_prep_image(filename, img_shape=img_shape, scale=scale):
-        """
-        Reads an image from filename, turns it into a tensor and reshapes into
-        (224, 224, 3).
-
-        Parameters
-        ----------
-        filename (str): string filename of target image
-        img_shape (int): size to resize target image to, default 224
-        scale (bool): whether to scale pixel values to range(0, 1), default True
-        """
-        # Read in the image
-        img = tf.io.read_file(filename)
-        # Decode it into a tensor
-        img = tf.image.decode_image(img, channels=3)
-        # Resize the image
-        img = tf.image.resize(img, [img_shape, img_shape])
-        # Rescale the image (get all values between 0 and 1) if needed
-        return img/255. if scale else img
-
     # Set up figure
     plt.figure(figsize=figsize)
 
@@ -635,4 +634,5 @@ def predict_and_plot(model, test_dir, class_names, img_shape=224, num_images=3, 
         plt.title(f"actual: {class_name}, pred: {pred_class}, prob: {np.max(pred):.2f}", color=("green" if class_name==pred_class else "red"))
         plt.axis("off")
         
-    plt.show()    
+    plt.show()
+
