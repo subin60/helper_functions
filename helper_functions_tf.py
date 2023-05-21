@@ -134,7 +134,7 @@ def view_random_image(target_dir, target_class):
 
   return img
 
-
+'''
 import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
@@ -181,7 +181,7 @@ def pred_and_plot(model, filename, class_names, img_shape=224):
   plt.title(f"Prediction: {pred_class}")
   plt.axis(False)
   plt.show()
-
+'''
   
 import pathlib
 import numpy as np
@@ -565,4 +565,74 @@ def make_confusion_matrix(y_true, y_pred, classes=None, figsize=(10, 10), text_s
   
   if savefig:
     fig.savefig("confusion_matrix.png")
-  
+
+    
+import os
+import random
+import tensorflow as tf
+import matplotlib.pyplot as plt
+import numpy as np
+
+def predict_and_plot(model, test_dir, class_names, img_shape=224, num_images=3, figsize=(18, 10), scale=True):
+    """
+    Load random images, make predictions on them, and plot them.
+
+    Parameters
+    ----------
+    model: Trained model.
+    test_dir (str): Directory where test images are stored in class-name subdirectories.
+    class_names (list): List of class names.
+    img_shape (int): Target shape of image.
+    num_images (int): Number of images to predict and plot, default 3.
+    figsize (tuple): Figure size, default (18, 10).
+    scale (bool): Whether to scale image pixel values to range(0, 1), default True.
+    """
+
+    def load_and_prep_image(filename, img_shape=img_shape, scale=scale):
+        """
+        Reads an image from filename, turns it into a tensor and reshapes into
+        (224, 224, 3).
+
+        Parameters
+        ----------
+        filename (str): string filename of target image
+        img_shape (int): size to resize target image to, default 224
+        scale (bool): whether to scale pixel values to range(0, 1), default True
+        """
+        # Read in the image
+        img = tf.io.read_file(filename)
+        # Decode it into a tensor
+        img = tf.image.decode_image(img, channels=3)
+        # Resize the image
+        img = tf.image.resize(img, [img_shape, img_shape])
+        # Rescale the image (get all values between 0 and 1) if needed
+        return img/255. if scale else img
+
+    # Set up figure
+    plt.figure(figsize=figsize)
+
+    for i in range(num_images):
+        # Choose a random class and a random image from that class
+        class_name = random.choice(class_names)
+        filepath = random.choice(os.listdir(test_dir + "/" + class_name))
+
+        # Load the image and make predictions
+        img = load_and_prep_image(test_dir + "/" + class_name + "/" + filepath, img_shape=img_shape, scale=scale)
+        pred = model.predict(tf.expand_dims(img, axis=0))
+
+        # Get the predicted class
+        if len(pred[0]) > 1: # multi-class
+            pred_class = class_names[np.argmax(pred)]
+        else: # binary class
+            pred_class = class_names[int(tf.round(pred))]
+
+        # Normalize img to [0, 1] for visualization
+        img = img / np.max(img)
+
+        # Plot the image and its prediction
+        plt.subplot(1, num_images, i+1)
+        plt.imshow(img)
+        plt.title(f"actual: {class_name}, pred: {pred_class}, prob: {np.max(pred):.2f}", color=("green" if class_name==pred_class else "red"))
+        plt.axis("off")
+        
+    plt.show()    
