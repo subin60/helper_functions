@@ -18,6 +18,31 @@ from tensorflow.keras.models import clone_model
 from tensorflow.keras.callbacks import ModelCheckpoint
 
 
+import os
+import subprocess
+
+def install_tensorflow_version(version="2.9.0"):
+    """
+    This function installs a specific version of TensorFlow using pip and 
+    suppresses all the output messages except for the installed TensorFlow version.
+
+    Parameters:
+    version (str): The version number of TensorFlow to install. Defaults to "2.9.0".
+    
+    Returns:
+    None
+    """
+    # Construct the pip install command
+    pip_command = f"pip install -U -q tensorflow=={version}"
+    
+    # Run the pip install command and suppress output
+    FNULL = open(os.devnull, 'w')
+    subprocess.call(pip_command, stdout=FNULL, stderr=subprocess.STDOUT, shell=True)
+    
+    # After installation, import tensorflow and print the installed version
+    import tensorflow as tf
+    print(f'TensorFlow version: {tf.__version__}')
+
 
 
 import matplotlib.pyplot as plt
