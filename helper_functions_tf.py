@@ -8,6 +8,7 @@ import datetime
 import matplotlib.image as mpimg
 
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, precision_recall_fscore_support
 
 import tensorflow as tf
 from tensorflow.keras import Sequential
@@ -662,3 +663,41 @@ def predict_and_plot(model, test_dir, class_names, img_shape=224, num_images=3, 
         
     plt.show()
 
+    
+    
+from sklearn.metrics import accuracy_score, precision_recall_fscore_support
+
+def calculate_metrics(y_true, y_pred):
+    """
+    Evaluates the accuracy, precision, recall, and f1 score of a binary classification model.
+
+    The function uses the accuracy_score and precision_recall_fscore_support methods from sklearn.metrics.
+    The average parameter is set to "weighted" to calculate metrics for each label and find their average weighted 
+    by support (the number of true instances for each label), which can account for imbalance in the dataset.
+
+    Args:
+    y_true (array-like of shape (n_samples)): Ground truth (correct) target values.
+    y_pred (array-like of shape (n_samples)): Estimated targets as returned by a classifier.
+
+    Returns:
+    dict: A dictionary containing the accuracy, precision, recall, and f1-score metrics.
+    """
+    # Calculate model accuracy by comparing the true and predicted labels.
+    # Multiply by 100 to get the accuracy percentage.
+    accuracy = accuracy_score(y_true, y_pred) * 100
+    
+    # Calculate the precision, recall, and f1-score using precision_recall_fscore_support.
+    # The "weighted" option calculates metrics for each label, and find their average weighted 
+    # by the number of true instances for each label. This alters 'macro' to account for label imbalance.
+    precision, recall, f1, _ = precision_recall_fscore_support(y_true, y_pred, average='weighted')
+    
+    # Store the metrics in a dictionary for easy access and return the dictionary.
+    metrics = {
+        'accuracy': accuracy,
+        'precision': precision,
+        'recall': recall,
+        'f1': f1
+    }
+    
+    return metrics
+    
