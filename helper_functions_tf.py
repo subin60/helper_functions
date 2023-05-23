@@ -667,6 +667,9 @@ def predict_and_plot(model, test_dir, class_names, img_shape=224, num_images=3, 
     
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support
 
+from sklearn.metrics import accuracy_score, precision_recall_fscore_support
+import tensorflow as tf
+
 def calculate_metrics(y_true, y_pred):
     """
     Evaluates the accuracy, precision, recall, and f1 score of a binary classification model.
@@ -682,9 +685,14 @@ def calculate_metrics(y_true, y_pred):
     Returns:
     dict: A dictionary containing the accuracy, precision, recall, and f1-score metrics.
     """
+    # If predictions are coming from a TensorFlow model, they might be probabilities in the range [0, 1].
+    # Convert these probabilities to crisp classes (0 or 1) using round function,
+    # and remove the extra dimensions using squeeze before calculating the metrics.
+    y_pred = tf.round(tf.squeeze(y_pred))
+
     # Calculate model accuracy by comparing the true and predicted labels.
     # Multiply by 100 to get the accuracy percentage.
-    accuracy = accuracy_score(y_true, y_pred) * 100
+    accuracy = accuracy_score(y_true, y_pred)
     
     # Calculate the precision, recall, and f1-score using precision_recall_fscore_support.
     # The "weighted" option calculates metrics for each label, and find their average weighted 
@@ -700,4 +708,5 @@ def calculate_metrics(y_true, y_pred):
     }
     
     return metrics
+
     
