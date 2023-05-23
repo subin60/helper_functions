@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import datetime
 import matplotlib.image as mpimg
 
+from sklearn.model_selection import train_test_split
 
 import tensorflow as tf
 from tensorflow.keras import Sequential
