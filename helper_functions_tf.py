@@ -122,6 +122,35 @@ def download_and_unzip(filepath):
   # Close the ZipFile object
   zip_ref.close()
 
+import os
+import tarfile
+
+def download_and_untar(filepath):
+  """
+  Downloads and extracts a tar.gz file from a specified filepath.
+
+  Args:
+  filepath: A string specifying the URL of the tar.gz file to download.
+
+  Returns:
+  None.
+  """
+  # Use wget to download the file
+  os.system(f'wget {filepath}')
+  
+  # Use os.path.basename to get the filename (with extension) from the filepath
+  filename_with_extension = os.path.basename(filepath)
+  
+  # Create a TarFile object
+  tar_ref = tarfile.open(filename_with_extension, 'r:gz')
+
+  # Extract all the contents of the tar file in current directory
+  tar_ref.extractall()
+
+  # Close the TarFile object
+  tar_ref.close()
+
+
 
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
